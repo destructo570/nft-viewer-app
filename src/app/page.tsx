@@ -12,22 +12,21 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { SpiralGalleryView } from "@/components/SpiralGalleryView";
+import { getNftsOwned } from "./api/actions";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const [view_3d, setView3D] = useState(false);
   const [wallet, setWallet] = useState("");
   const [nft_list, setNftList] = useState([]);
-  //AP2jT5sV4k3oQ9d7CVsHBJgc5c53bvYQF2iZ9YgEFssC
   //3mmRhnnopopvxwdtshM5JG75zByqmrt36LPXv91J1uM9
   //A83m96AktczTNaHbDDTLcWEpbo3dtgy6pwHcMqMrEaEJ
 
   const onSubmitClick = async () => {
     setLoading(true);
-    const res = await fetch(`/api/fetch-nfts?wallet=${wallet}`);
-    const response = await res?.json();
-    if (response && response?.length) {
-      setNftList(response || []);
+    const response = await getNftsOwned(wallet);
+    if (response && response?.data?.nfts) {
+      setNftList(response?.data?.nfts || []);
     }
     setLoading(false);
   };
